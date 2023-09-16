@@ -35,8 +35,7 @@ void myIdle(void);
 void myTimerFunc(int val);
 void drawSquare(float cx, float cy, float angle, float scale, float r,
                     float g, float b, bool contour);
-void drawDisc(float cx, float cy, float radius, float r,
-                    float g, float b);
+void drawDisc(float cx, float cy, float radius, float r, float g, float b, float vertsPerCircle);
 
 
 //--------------------------------------
@@ -83,8 +82,13 @@ float centerX = 600, centerY = 500, radius = 150;
 float circlePts[numCirclePts][2];
 
 // Draw a simple Disc
-void drawDisc(float cx, float cy, float radius, float r, float g, float b)
+void drawDisc(float cx, float cy, float radius, float r, float g, float b, float vertsPerCircle)
 {
+	glPushMatrix();
+
+	glTranslate
+
+
     float angleStep = 2.f*M_PI/numCirclePts;
 	for (int k=0; k<vertsPerCircle; k++)
 		{
@@ -305,15 +309,14 @@ void myInit(void)
 //	glutAddSubMenu("Submenu example", mySubmenu);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 	
-	float angleStep = 2.f*M_PI/numCirclePts;
-	for (int k=0; k<numCirclePts; k++)
-	{
-		float theta = k*angleStep;
-		circlePts[k][0] = centerX + radius*cosf(theta);
-		circlePts[k][1] = centerY + radius*sinf(theta);
-	}
-	glEnd();
-
+	// float angleStep = 2.f*M_PI/numCirclePts;
+	// for (int k=0; k<numCirclePts; k++)
+	// {
+	// 	float theta = k*angleStep;
+	// 	circlePts[k][0] = centerX + radius*cosf(theta);
+	// 	circlePts[k][1] = centerY + radius*sinf(theta);
+	// }
+	drawDisc(400.f, 400.f, 100.f, 1.f, 0.f, 0.f, 16.f);
 	
 	
 //	myDisplayFunc();
