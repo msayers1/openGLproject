@@ -18,6 +18,7 @@
 #include <unistd.h>
 //	User headers
 #include "glPlatform.h"
+#include "Ellipse.hpp"
 
 using namespace std;
 
@@ -80,31 +81,8 @@ const float vertArray[][2] = {{400.f, 100.f},
 const int numCirclePts = 24;
 float centerX = 600, centerY = 500, radius = 150;
 float circlePts[numCirclePts][2];
-
-// Draw a simple Disc
-void drawDisc(float cx, float cy, float radius, float r, float g, float b, float vertsPerCircle)
-{
-	glPushMatrix();
-
-	glTranslate
-
-
-    float angleStep = 2.f*M_PI/numCirclePts;
-	for (int k=0; k<vertsPerCircle; k++)
-		{
-			float theta = k*angleStep;
-			glVertex2f(centerX + radius*cosf(theta), centerY + radius*sinf(theta));
-		}
-}
-
-
-// for (int k=0; k<vertsPerCircle; k++)
-// 		{
-// 			float theta = k*angleStep;
-// 			glVertex2f(centerX + radius*cosf(theta), centerY + radius*sinf(theta));
-// 		}
-
-
+std::vector<std::vector<float>> genCirclePts(numCirclePts);
+float angle = 30, radiusX = 200, radiusY = 300;
 //	This is the function that does the actual scene drawing
 //	Typically, you shold almost never have to call this function directly yourself.
 //	It will be called automatically by glut, the way in Java the JRE invokes the paint
@@ -142,12 +120,14 @@ void myDisplayFunc(void)
 
 	//	Draw a red disk of center (x=600, y=500), radius = 150
 	//	Version 3
-	glColor3f(1.f, 0.f, 0.f);
-	glBegin(GL_POLYGON);
-			for (int k=0; k<numCirclePts; k++)
-				glVertex2fv(circlePts[k]);
-	glEnd();
-
+	// glColor3f(1.f, 0.f, 0.f);
+	// glBegin(GL_POLYGON);
+	// 		for (int k=0; k<numCirclePts; k++)
+	// 			glVertex2fv(circlePts[k]);
+	// glEnd();
+	Ellipse newEllipse(centerX, centerY, angle, radiusX, radiusY, 1.0f, 0.f,0.f, genCirclePts);
+	newEllipse.draw();
+	// Ellipse* newEllipse = new Ellipse(centerX, centerY, angle, radiusX, radiusY, 1.0f, 0.f,0.f);
 	//	We were drawing into the back buffer, now it should be brought
 	//	to the forefront.
 	glutSwapBuffers();
@@ -308,7 +288,6 @@ void myInit(void)
 	
 //	glutAddSubMenu("Submenu example", mySubmenu);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
-	
 	// float angleStep = 2.f*M_PI/numCirclePts;
 	// for (int k=0; k<numCirclePts; k++)
 	// {
@@ -316,7 +295,18 @@ void myInit(void)
 	// 	circlePts[k][0] = centerX + radius*cosf(theta);
 	// 	circlePts[k][1] = centerY + radius*sinf(theta);
 	// }
-	drawDisc(400.f, 400.f, 100.f, 1.f, 0.f, 0.f, 16.f);
+	float angleStep = 2.f*M_PI/numCirclePts;
+	for (int k=0; k<numCirclePts; k++)
+	{
+		std::vector<float> tempCirclePts;
+		float theta = k*angleStep;
+		tempCirclePts.push_back(cosf(theta));
+		tempCirclePts.push_back(sinf(theta));
+		genCirclePts.push_back(tempCirclePts);
+		// genCirclePts[k].first = cosf(theta);
+		// genCirclePts[k].second = sinf(theta);
+	}
+	//drawDisc(400.f, 400.f, 100.f, 1.f, 0.f, 0.f, 16.f);
 	
 	
 //	myDisplayFunc();
